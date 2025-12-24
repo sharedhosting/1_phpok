@@ -1,3 +1,45 @@
 ```
-*.bak
+# Database files
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+dist/
+build/
+target/
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
