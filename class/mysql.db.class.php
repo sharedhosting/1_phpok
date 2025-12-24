@@ -231,6 +231,49 @@ class qgSQL
 		}
 		return @mysql_escape_string($char);
 	}
+	
+	#[安全的参数化查询方法 - 防止SQL注入]
+	function prepare_query($sql_template, $params = array())
+	{
+		// 替换占位符
+		$sql = $sql_template;
+		foreach($params as $key => $value) {
+			if(is_numeric($value)) {
+				$sql = str_replace(':'.$key, $this->qgEscapeString($value), $sql);
+			} else {
+				$sql = str_replace(':'.$key, "'".$this->qgEscapeString($value)."'", $sql);
+			}
+		}
+		return $this->qgQuery($sql);
+	}
+	
+	#[安全的参数化查询获取单行结果方法 - 防止SQL注入]
+	function prepare_get_one($sql_template, $params = array())
+	{
+		$sql = $sql_template;
+		foreach($params as $key => $value) {
+			if(is_numeric($value)) {
+				$sql = str_replace(':'.$key, $this->qgEscapeString($value), $sql);
+			} else {
+				$sql = str_replace(':'.$key, "'".$this->qgEscapeString($value)."'", $sql);
+			}
+		}
+		return $this->qgGetOne($sql);
+	}
+	
+	#[安全的参数化查询获取所有结果方法 - 防止SQL注入]
+	function prepare_get_all($sql_template, $params = array())
+	{
+		$sql = $sql_template;
+		foreach($params as $key => $value) {
+			if(is_numeric($value)) {
+				$sql = str_replace(':'.$key, $this->qgEscapeString($value), $sql);
+			} else {
+				$sql = str_replace(':'.$key, "'".$this->qgEscapeString($value)."'", $sql);
+			}
+		}
+		return $this->qgGetAll($sql);
+	}
 
 	function get_mysql_version()
 	{
