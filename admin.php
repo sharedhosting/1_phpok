@@ -17,8 +17,8 @@ require_once("class/string.class.php");
 $STR = new QG_C_STRING(false,false,false);
 
 $magic_quotes_gpc = get_magic_quotes_gpc();
-@extract($STR->format($_POST));
-@extract($STR->format($_GET));
+$_POST = $STR->format($_POST);
+$_GET = $STR->format($_GET);
 if(!$magic_quotes_gpc)
 {
 	$_FILES = $STR->format($_FILES);
