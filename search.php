@@ -40,7 +40,7 @@ if($sysact == "searchok")
 	define("QGLIST_ID",0);#[定义常量QGLIST_ID]
 	define("QGLIST_IDIN",$idin);#[定义常量QGLIST_IDIN，以供模块调用]
 	#[]
-	$condition = " FROM ".$prefix."msg AS m,".$prefix."category AS c WHERE m.cateid in(".$idin.") AND m.ifcheck='1' AND m.subject LIKE '%".$keywords."%' AND m.cateid=c.id";
+	$condition = " FROM ".$prefix."msg AS m,".$prefix."category AS c WHERE m.cateid in(".$idin.") AND m.ifcheck='1' AND m.subject LIKE '%".$DB->qgEscapeString(keywords)."'%' AND m.cateid=c.id";
 	$count = intval($_GET["count"]);
 	if(!$count || $count<1)
 	{
