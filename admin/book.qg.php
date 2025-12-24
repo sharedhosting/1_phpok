@@ -14,8 +14,8 @@ if($sysact == "delete")
 	{
 		Error("操作非法",$r_url);
 	}
-	$sql = "DELETE FROM ".$prefix."book WHERE id='".$id."'";
-	$rs = $DB->qgQuery($sql);
+	$sql = "DELETE FROM ".$prefix."book WHERE id=:id";
+	$rs = $DB->prepare_query($sql, array("id"=>$id));
 	Error("留言主题ID：".$id." 已成功删除",$r_url);
 }
 elseif($sysAct == "plset")
@@ -28,7 +28,18 @@ elseif($sysAct == "plset")
 	$qgtype = $STR->safe($qgtype);
 	if($qgtype == "delete")
 	{
-		$DB->qgQuery("DELETE FROM ".$prefix."book WHERE id in(".$myidlist.")");#[删除主题]
+		#[验证myidlist是否只包含数字和逗号]
+		$ids = explode(',', $myidlist);
+		$safe_ids = array();
+		foreach($ids as $id_val) {
+			if(is_numeric(trim($id_val))) {
+				$safe_ids[] = intval(trim($id_val));
+			}
+		}
+		$safe_id_list = implode(',', $safe_ids);
+		if(!empty($safe_ids)) {
+			$DB->qgQuery("DELETE FROM ".$prefix."book WHERE id in(".$safe_id_list.")");#[删除主题]
+		}
 		Error("批量删除主题完成！","admin.php?file=book&act=list");
 	}
 	elseif($qgtype == "dcheck")

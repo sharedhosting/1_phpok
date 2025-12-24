@@ -126,7 +126,22 @@ elseif($sysAct == "addok")
 		$msg["parentid"] = 0;
 	}
 	#[写入数据]
-	$DB->qgQuery("INSERT INTO ".$prefix."category(sysgroupid,rootid,parentid,catename,catestyle,taxis,tpl_index,tpl_list,tpl_msg,note,status,language,psize,showtype) VALUES('".$msg["sysgroupid"]."','".$msg["rootid"]."','".$msg["parentid"]."','".$msg["catename"]."','".$msg["catestyle"]."','".$msg["taxis"]."','".$msg["tpl_index"]."','".$msg["tpl_list"]."','".$msg["tpl_msg"]."','".$msg["note"]."','".$msg["status"]."','".$language."','".$msg["psize"]."','".$msg["showtype"]."')");
+	$DB->prepare_query("INSERT INTO ".$prefix."category(sysgroupid,rootid,parentid,catename,catestyle,taxis,tpl_index,tpl_list,tpl_msg,note,status,language,psize,showtype) VALUES(:sysgroupid,:rootid,:parentid,:catename,:catestyle,:taxis,:tpl_index,:tpl_list,:tpl_msg,:note,:status,:language,:psize,:showtype)", array(
+		"sysgroupid"=>$msg["sysgroupid"],
+		"rootid"=>$msg["rootid"],
+		"parentid"=>$msg["parentid"],
+		"catename"=>$msg["catename"],
+		"catestyle"=>$msg["catestyle"],
+		"taxis"=>$msg["taxis"],
+		"tpl_index"=>$msg["tpl_index"],
+		"tpl_list"=>$msg["tpl_list"],
+		"tpl_msg"=>$msg["tpl_msg"],
+		"note"=>$msg["note"],
+		"status"=>$msg["status"],
+		"language"=>$language,
+		"psize"=>$msg["psize"],
+		"showtype"=>$msg["showtype"]
+	));
 	Error("分类信息添加成功...","admin.php?file=category&act=list&sysgroupid=".$sysgroupid);
 }
 elseif($sysAct == "list")
@@ -175,7 +190,7 @@ elseif($sysAct == "delete")
 		Error("已存在内容信息，不允许删除","admin.php?file=category&act=list&sysgroupid=".$sysgroupid);
 	}
 	#[删除分类信息]
-	$DB->qgQuery("DELETE FROM ".$prefix."category WHERE id='".$id."'");
+	$DB->prepare_query("DELETE FROM ".$prefix."category WHERE id=:id", array("id"=>$id));
 	Error("分类已删除成功","admin.php?file=category&act=list&sysgroupid=".$sysgroupid);
 }
 elseif($sysAct == "modify")
@@ -282,7 +297,19 @@ elseif($sysAct == "modifyok")
 		}
 	}
 	#[更新内容信息]
-	$DB->qgQuery("UPDATE ".$prefix."category SET catename='".$msg["catename"]."',catestyle='".$msg["catestyle"]."',taxis='".$msg["taxis"]."',tpl_index='".$msg["tpl_index"]."',tpl_list='".$msg["tpl_list"]."',tpl_msg='".$msg["tpl_msg"]."',note='".$msg["note"]."',status='".$msg["status"]."',psize='".$msg["psize"]."',showtype='".$msg["showtype"]."' WHERE id='".$id."'");
+	$DB->prepare_query("UPDATE ".$prefix."category SET catename=:catename,catestyle=:catestyle,taxis=:taxis,tpl_index=:tpl_index,tpl_list=:tpl_list,tpl_msg=:tpl_msg,note=:note,status=:status,psize=:psize,showtype=:showtype WHERE id=:id", array(
+		"catename"=>$msg["catename"],
+		"catestyle"=>$msg["catestyle"],
+		"taxis"=>$msg["taxis"],
+		"tpl_index"=>$msg["tpl_index"],
+		"tpl_list"=>$msg["tpl_list"],
+		"tpl_msg"=>$msg["tpl_msg"],
+		"note"=>$msg["note"],
+		"status"=>$msg["status"],
+		"psize"=>$msg["psize"],
+		"showtype"=>$msg["showtype"],
+		"id"=>$id
+	));
 	Error("分类信息编辑成功...","admin.php?file=category&act=list&sysgroupid=".$sysgroupid);
 }
 ?>
