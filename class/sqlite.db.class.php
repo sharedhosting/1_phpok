@@ -99,7 +99,7 @@ class qgSQL
 		if($this->result) {
 			while($rows = $this->result->fetchArray($this->rsType))
 			{
-				$rs[ = $rows;
+				$rs[] = $rows;
 			}
 		}
 		return $rs;
@@ -144,7 +144,7 @@ class qgSQL
 		{
 			$this->qgQuery($sql,"NUM");
 			$rs = $this->qgGetOne();
-			return $rs[0;
+			return $rs[0];
 		}
 		else
 		{
@@ -163,7 +163,7 @@ class qgSQL
 			// 从原始SQL构建COUNT查询
 			$count_sql = "SELECT COUNT(*) as count FROM (" . $sql . ") AS count_table";
 			$count_result = $this->qgGetOne($count_sql);
-			return isset($count_result['count') ? $count_result['count' : 0;
+			return isset($count_result['count']) ? $count_result['count'] : 0;
 		}
 		else
 		{
@@ -192,7 +192,7 @@ class qgSQL
 		$result = $this->qgGetAll($sql);
 		$fields = array();
 		foreach($result as $row) {
-			$fields[ = $row['name';
+			$fields[] = $row['name'];
 		}
 		return $fields;
 	}
@@ -204,7 +204,7 @@ class qgSQL
 		$result = $this->qgGetAll($sql);
 		$tables = array();
 		foreach($result as $row) {
-			$tables[ = $row['name';
+			$tables[] = $row['name'];
 		}
 		return $tables;
 	}
@@ -212,7 +212,7 @@ class qgSQL
 	function qgTableName($table_list, $i)
 	{
 		// 在SQLite中，我们直接返回表名列表中的元素
-		return isset($table_list[$i) ? $table_list[$i : false;
+		return isset($table_list[$i]) ? $table_list[$i] : false;
 	}
 
 	function qgEscapeString($char)
@@ -279,7 +279,7 @@ class qgSQL
 		$rs = array();
 		if ($result) {
 			while($rows = $result->fetchArray(SQLITE3_ASSOC)) {
-				$rs[ = $rows;
+				$rs[] = $rows;
 			}
 		}
 		return $rs;
@@ -287,7 +287,7 @@ class qgSQL
 
 	function get_sqlite_version()
 	{
-		return $this->conn->version()['versionString';
+		return $this->conn->version()['versionString'];
 	}
 }
 ?>
