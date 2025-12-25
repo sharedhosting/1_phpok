@@ -1,15 +1,15 @@
 <?php
 #------------------------------------------------------------------------------
-#[谢您使用情感家园企业站程序：qgweb]
-#[本程序由情感开发完成，当前版本：5.0]
-#[本程序基于LGPL授权发布]
-#[如果您使用正式版，请将授权文件用FTP上传至copyright目录中]
-#[官方网站：www.phpok.com   www.qinggan.net]
-#[客服邮箱：qinggan@188.com]
-#[文件：sqlite.class.php]
+// 感谢您使用情感家园企业站程序：qgweb
+// 本程序由情感开发完成，当前版本：5.0
+// 本程序基于LGPL授权发布
+// 如果您使用正式版，请将授权文件用FTP上传至copyright目录中
+// 官方网站：www.phpok.com   www.qinggan.net
+// 客服邮箱：qinggan@188.com
+// 文件：sqlite.class.php
 #------------------------------------------------------------------------------
 
-#[类库sql]
+// 类库sql
 class qgSQL
 {
 	var $queryCount = 0;
@@ -18,9 +18,9 @@ class qgSQL
 	var $stmt;
 	var $result;
 	var $rsType = SQLITE3_ASSOC;
-	var $queryTimes = 0;#[查询时间]
+	var $queryTimes = 0;#[查询时间
 
-	#[构造函数]
+	//
 	function qgSQL($dbFile, $dbuser="", $dbpass="", $dbOpenType=false)
 	{
 		$this->dbFile = $dbFile;
@@ -28,14 +28,14 @@ class qgSQL
 		unset($dbFile, $dbuser, $dbpass, $dbOpenType);
 	}
 
-	#[兼容PHP5]
+	//
 	function __construct($dbFile, $dbuser="", $dbpass="", $dbOpenType=false)
 	{
 		$this->qgSQL($dbFile, $dbuser, $dbpass, $dbOpenType);
 		unset($dbFile, $dbuser, $dbpass, $dbOpenType);
 	}
 
-	#[连接数据库]
+	//
 	function connect()
 	{
 		try {
@@ -46,7 +46,7 @@ class qgSQL
 		}
 	}
 
-	#[关闭数据库连接]
+	//
 	function qgClose()
 	{
 		if($this->conn) {
@@ -55,7 +55,7 @@ class qgSQL
 		return true;
 	}
 
-	#[兼容PHP5]
+	//
 	function __destruct()
 	{
 		$this->qgClose();
@@ -99,7 +99,7 @@ class qgSQL
 		if($this->result) {
 			while($rows = $this->result->fetchArray($this->rsType))
 			{
-				$rs[] = $rows;
+				$rs[ = $rows;
 			}
 		}
 		return $rs;
@@ -144,7 +144,7 @@ class qgSQL
 		{
 			$this->qgQuery($sql,"NUM");
 			$rs = $this->qgGetOne();
-			return $rs[0];
+			return $rs[0;
 		}
 		else
 		{
@@ -157,22 +157,21 @@ class qgSQL
 	{
 		if($sql)
 		{
+			// 如果传入了SQL，我们先执行原始查询以保持与原有行为一致
 			$this->qgQuery($sql);
-			unset($sql);
+			// 然后执行COUNT查询来获取行数
+			// 从原始SQL构建COUNT查询
+			$count_sql = "SELECT COUNT(*) as count FROM (" . $sql . ") AS count_table";
+			$count_result = $this->qgGetOne($count_sql);
+			return isset($count_result['count') ? $count_result['count' : 0;
 		}
-		if($this->result) {
-			// SQLite3中统计行数需要特殊处理，我们执行COUNT查询
-			$rsC = 0;
-			while($rows = $this->result->fetchArray($this->rsType)) {
-				$rsC++;
-			}
-			// 重新执行查询以供后续使用
-			if($sql) {
-				$this->qgQuery($sql);
-			}
-			return $rsC;
+		else
+		{
+			// 如果没有传入SQL，说明之前已经执行了查询，我们尝试统计结果
+			// 但SQLite3的结果集无法直接获取行数，我们需要重新查询COUNT
+			// 这种情况下返回0或抛出异常，因为无法确定之前查询的行数
+			return 0;
 		}
-		return 0;
 	}
 
 	function qgNumFields($sql = "")
@@ -193,7 +192,7 @@ class qgSQL
 		$result = $this->qgGetAll($sql);
 		$fields = array();
 		foreach($result as $row) {
-			$fields[] = $row['name'];
+			$fields[ = $row['name';
 		}
 		return $fields;
 	}
@@ -205,7 +204,7 @@ class qgSQL
 		$result = $this->qgGetAll($sql);
 		$tables = array();
 		foreach($result as $row) {
-			$tables[] = $row['name'];
+			$tables[ = $row['name';
 		}
 		return $tables;
 	}
@@ -213,7 +212,7 @@ class qgSQL
 	function qgTableName($table_list, $i)
 	{
 		// 在SQLite中，我们直接返回表名列表中的元素
-		return isset($table_list[$i]) ? $table_list[$i] : false;
+		return isset($table_list[$i) ? $table_list[$i : false;
 	}
 
 	function qgEscapeString($char)
@@ -225,7 +224,7 @@ class qgSQL
 		return $this->conn->escapeString($char);
 	}
 	
-	#[安全的参数化查询方法 - 防止SQL注入]
+	// - 防止SQL注入
 	function prepare_query($sql_template, $params = array())
 	{
 		$stmt = $this->conn->prepare($sql_template);
@@ -243,7 +242,7 @@ class qgSQL
 		return $this->result !== false;
 	}
 	
-	#[安全的参数化查询获取单行结果方法 - 防止SQL注入]
+	// - 防止SQL注入
 	function prepare_get_one($sql_template, $params = array())
 	{
 		$stmt = $this->conn->prepare($sql_template);
@@ -263,7 +262,7 @@ class qgSQL
 		return false;
 	}
 	
-	#[安全的参数化查询获取所有结果方法 - 防止SQL注入]
+	// - 防止SQL注入
 	function prepare_get_all($sql_template, $params = array())
 	{
 		$stmt = $this->conn->prepare($sql_template);
@@ -280,7 +279,7 @@ class qgSQL
 		$rs = array();
 		if ($result) {
 			while($rows = $result->fetchArray(SQLITE3_ASSOC)) {
-				$rs[] = $rows;
+				$rs[ = $rows;
 			}
 		}
 		return $rs;
@@ -288,7 +287,7 @@ class qgSQL
 
 	function get_sqlite_version()
 	{
-		return $this->conn->version()['versionString'];
+		return $this->conn->version()['versionString';
 	}
 }
 ?>
